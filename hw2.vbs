@@ -9,18 +9,17 @@ Dim open_price_beginning, closing_price_end As Double
 Dim total_stock_volume As Double
 Dim formattingRange As Range
 
-total_stock_volume = 0
 
-
-' OPTION 1: manual input names of sheets in the existing Workbook. Can we read in automatically like number of rows?
-'mySheets = Array("A", "B", "C", "D", "E", "F", "P")
-
-' OPTION 2: modified from http://www.vbaexpress.com/forum/showthread.php?62270-An-Array-of-Sheet-Names&p=377930&viewfull=1#post377930
+' Counting of number of sheets within a workbook modified from solutions
+' presented in http://www.vbaexpress.com/forum/showthread.php?62270-An-Array-of-Sheet-Names&p=377930&viewfull=1#post377930
+' total number of sheets within the active Workbook
 nmbSheets = ActiveWorkbook.Sheets.Count
 
+' Assign a dynamic array containing references to Sheets within the workbook cycling from 1st to the nmbSheets
 ReDim mySheets(1 To nmbSheets)
-MsgBox ("Your active workbook has " + Str(nmbSheets) + " sheets")
+'MsgBox ("Your active workbook has " + Str(nmbSheets) + " sheets")
   
+' Red in individual sheet names into the dynamic array
 For s = 1 To (nmbSheets)
     mySheets(s) = ActiveWorkbook.Sheets(s).Name
 Next s
@@ -44,6 +43,9 @@ For s = 1 To (nmbSheets)
     ' counter to determine opening price per ticker
     f = 0
     
+    ' reset total stock volume value as it will be determined for each individual ticker below
+    total_stock_volume = 0
+    
     ' loop through each value in <ticker> column and output a list of unique values
     For i = 2 To (lrow)
         'Read in curren ticker name
@@ -63,7 +65,7 @@ For s = 1 To (nmbSheets)
             closing_price = ActiveWorkbook.Sheets(mySheets(s)).Cells((i), 6).Value
             ActiveWorkbook.Sheets(mySheets(s)).Cells(k, 9).Value = v
             ActiveWorkbook.Sheets(mySheets(s)).Cells(k, 10).Value = (closing_price - opening_price)
-            If opening_price = 0 And closing_price = 0 Then
+            If opening_price = 0 Then 'And closing_price = 0 Then
                 ActiveWorkbook.Sheets(mySheets(s)).Cells(k, 11).Value = 0#
             Else
                 ActiveWorkbook.Sheets(mySheets(s)).Cells(k, 11).Value = (closing_price - opening_price) / opening_price
