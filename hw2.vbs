@@ -85,6 +85,11 @@ For s = 1 To (nmbSheets)
     'calculate number of rows of filled-in data for column J. It should be equal to a total number of ticker names + 1 for header
     lrow = ActiveWorkbook.Sheets(mySheets(s)).Cells(Rows.Count, 10).End(xlUp).Row
     
+    ' Initialize reference values for maximum and minimum decrease in stock value calculations
+    max_increase = ActiveWorkbook.Sheets(mySheets(s)).Cells(2, 11).Value
+    max_decrease = max_increase
+    max_total_stock_volume = ActiveWorkbook.Sheets(mySheets(s)).Cells(2, 12).Value
+    
     ' Change color of cells in J column based on their value. Set color to green if >0 and red - if <0
     For i = 2 To lrow
     'MsgBox ("Cell value in row  " + Str(lrow) + " is " + Str(ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 10).Value))
@@ -93,8 +98,40 @@ For s = 1 To (nmbSheets)
         ElseIf ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 10).Value < 0 Then
             ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 10).Interior.ColorIndex = 3
         End If
-    Next i
         
+    ' Check to see if current is the max/min % decrease
+        If ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 11).Value > max_increase Then
+            max_increase = ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 11).Value
+            max_increase_stock = ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 9).Value
+        End If
+        If ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 11).Value < max_decrease Then
+            max_decrease = ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 11).Value
+            max_decrease_stock = ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 9).Value
+        End If
+        If ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 12).Value > max_total_stock_volume Then
+            max_total_stock_volume = ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 12).Value
+            max_total_stock_volume_stock = ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 9).Value
+        End If
+    Next i
+    
+    ' report min/max % change statistics
+    ' row headers
+    ActiveWorkbook.Sheets(mySheets(s)).Range("O2").Value = "Greatest % increase"
+    ActiveWorkbook.Sheets(mySheets(s)).Range("O3").Value = "Greatest % decrease"
+    ActiveWorkbook.Sheets(mySheets(s)).Range("O4").Value = "Greatest Total Volume"
+    ' column headers
+    ActiveWorkbook.Sheets(mySheets(s)).Range("P1").Value = "Ticker"
+    ActiveWorkbook.Sheets(mySheets(s)).Range("Q1").Value = "Value"
+    
+    ActiveWorkbook.Sheets(mySheets(s)).Range("P2").Value = max_increase_stock
+    ActiveWorkbook.Sheets(mySheets(s)).Range("P3").Value = max_decrease_stock
+    ActiveWorkbook.Sheets(mySheets(s)).Range("P4").Value = max_total_stock_volume_stock
+    '
+    ActiveWorkbook.Sheets(mySheets(s)).Range("Q2").Value = max_increase
+        ActiveWorkbook.Sheets(mySheets(s)).Range("Q2").NumberFormat = "0.00%"
+    ActiveWorkbook.Sheets(mySheets(s)).Range("Q3").Value = max_decrease
+        ActiveWorkbook.Sheets(mySheets(s)).Range("Q3").NumberFormat = "0.00%"
+    ActiveWorkbook.Sheets(mySheets(s)).Range("Q4").Value = max_total_stock_volume
 Next s
 
 End Sub
