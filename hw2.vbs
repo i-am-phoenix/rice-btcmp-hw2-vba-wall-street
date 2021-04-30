@@ -5,9 +5,8 @@ Dim i, j, k, s, f, l, nmbSheets, stock_counter As Integer
 Dim lrow As Long
 Dim mySheets()
 Dim v As String
-Dim open_price_beginning, closing_price_end As Double
-Dim total_stock_volume As Double
-Dim formattingRange As Range
+Dim open_price, closing_price, total_stock_volume As Double
+Dim max_increase, max_decrease, max_total_stock_volume as double
 
 
 ' Counting of number of sheets within a workbook modified from solutions
