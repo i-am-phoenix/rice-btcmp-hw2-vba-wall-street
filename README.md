@@ -29,3 +29,20 @@ Use VBA scripting to analyze real stock market data.
 2. Make the appropriate adjustments to your VBA script that will allow it to run on every worksheet, i.e., every year, just by running the VBA script once.
 
 ## Solution
+
+Main approach to the solution of the above problem was to write a universal VBA script, which would automatically determine number of sheets present within a given Workbook and loop though the varying number of rows of data within each Sheet individually.
+
+VBA script was developed using the Test Data set and was then ran over the Stock Data set. Below are the snapshots of the three of the Workbook sheets after the completion of VBA script:
+
+**2014**
+
+<img src="Images\img_multi_year_stock_data_2014.JPG" alt="2014 Multi Year Stock analysis" style="zoom:75%;" />
+
+**2015**
+
+<img src="Images\img_multi_year_stock_data_2015.JPG" alt="2015 Multi Year Stock analysis" style="zoom:75%;" />
+
+**2016**
+
+<center> <img src="Images\img_multi_year_stock_data_2016.JPG" alt="2016 Multi Year Stock analysis" style="zoom:75%;" /></center>
+
