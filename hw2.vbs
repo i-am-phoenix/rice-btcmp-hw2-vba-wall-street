@@ -16,40 +16,37 @@ nmbSheets = ActiveWorkbook.Sheets.Count
 
 ' Assign a dynamic array containing references to Sheets within the workbook cycling from 1st to the nmbSheets
 ReDim mySheets(1 To nmbSheets)
-'MsgBox ("Your active workbook has " + Str(nmbSheets) + " sheets")
   
 ' Red in individual sheet names into the dynamic array
 For s = 1 To (nmbSheets)
     mySheets(s) = ActiveWorkbook.Sheets(s).Name
 Next s
 
-
-' loop through each sheet
+' Loop through each sheet
 For s = 1 To (nmbSheets)
-    'Create and populate "Ticker" column
+    ' Create and populate "Ticker" column
     ActiveWorkbook.Sheets(mySheets(s)).Range("I1").Value = "Ticker"
     ActiveWorkbook.Sheets(mySheets(s)).Range("J1").Value = "Yearly change"
     ActiveWorkbook.Sheets(mySheets(s)).Range("K1").Value = "Percent change"
     ActiveWorkbook.Sheets(mySheets(s)).Range("L1").Value = "Total stock volume"
 
-    ' calculate number of rows of data in a given Sheet
+    ' Calculate number of rows of data in a given Sheet
     lrow = ActiveWorkbook.Sheets(mySheets(s)).Cells(Rows.Count, 1).End(xlUp).Row
-    'MsgBox ("Number of rows in the Sheet '" + (mySheets(s)) + "' is " + Str(lrow))
-    
-    'reset position of stock name listing start on each sheet
+        
+    ' Reset position of stock name listing start on each sheet
     k = 2
     
-    ' counter to determine opening price per ticker
+    ' Reset counter to determine opening price per ticker
     f = 0
     
-    ' reset total stock volume value as it will be determined for each individual ticker below
+    ' Reset total stock volume value as it will be determined for each individual ticker below
     total_stock_volume = 0
     
-    ' loop through each value in <ticker> column and output a list of unique values
+    ' Loop through each value in <ticker> column and output a list of unique values
     For i = 2 To (lrow)
-        'Read in curren ticker name
+        ' Read in curren ticker name
         v = ActiveWorkbook.Sheets(mySheets(s)).Cells((i), 1).Value
-        'If we are switching to a new ticker name, record opening price
+        ' If we are switching to a new ticker name, record opening price
         If f = 0 Then
             opening_price = ActiveWorkbook.Sheets(mySheets(s)).Cells((i), 3).Value
             f = f + 1
@@ -57,18 +54,20 @@ For s = 1 To (nmbSheets)
         
         total_stock_volume = total_stock_volume + ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 7)
         
-        ' check if the value is the same as the above one, if different - preserve it
+        ' Check if the value is the same as the above one, if different - preserve it
         ' as a new unique value
         If v <> ActiveWorkbook.Sheets(mySheets(s)).Cells(i + 1, 1).Value Then
-            'stock_counter = stock_counter + 1
             closing_price = ActiveWorkbook.Sheets(mySheets(s)).Cells((i), 6).Value
+
             ActiveWorkbook.Sheets(mySheets(s)).Cells(k, 9).Value = v
             ActiveWorkbook.Sheets(mySheets(s)).Cells(k, 10).Value = (closing_price - opening_price)
+
             If opening_price = 0 Then 'And closing_price = 0 Then
                 ActiveWorkbook.Sheets(mySheets(s)).Cells(k, 11).Value = 0#
             Else
                 ActiveWorkbook.Sheets(mySheets(s)).Cells(k, 11).Value = (closing_price - opening_price) / opening_price
             End If
+            ' Format the output cell as percentage value (%)
             ActiveWorkbook.Sheets(mySheets(s)).Cells(k, 11).NumberFormat = "0.00%"
             
             ActiveWorkbook.Sheets(mySheets(s)).Cells(k, 12).Value = total_stock_volume
