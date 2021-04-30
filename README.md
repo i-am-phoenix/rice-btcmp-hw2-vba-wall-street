@@ -4,9 +4,9 @@
 Use VBA scripting to analyze real stock market data.
 
 ## Input data
-* [Test Data](Resources/alphabetical_testing.xlsx) - Used this data set for script development.
+* [Test Data](Resources/alphabetical_testing_0pt1.xlsm) - Used this data set for script development.
 
-* [Stock Data](Resources/Multiple_year_stock_data.xlsx) - Final analysis was run on this data using teh developed script.
+* [Stock Data](Resources/Multiple_year_stock_data_0pt1.xlsm) - Final analysis was run on this data using teh developed script.
 
 ## Instructions
 
