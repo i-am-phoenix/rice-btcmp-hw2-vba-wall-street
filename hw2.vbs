@@ -62,6 +62,7 @@ For s = 1 To (nmbSheets)
             ActiveWorkbook.Sheets(mySheets(s)).Cells(k, 9).Value = v
             ActiveWorkbook.Sheets(mySheets(s)).Cells(k, 10).Value = (closing_price - opening_price)
 
+            ' Implemented division-by-zero check
             If opening_price = 0 Then 'And closing_price = 0 Then
                 ActiveWorkbook.Sheets(mySheets(s)).Cells(k, 11).Value = 0#
             Else
@@ -72,17 +73,15 @@ For s = 1 To (nmbSheets)
             
             ActiveWorkbook.Sheets(mySheets(s)).Cells(k, 12).Value = total_stock_volume
             
-            
-            
-            'shifting summary output by one row
+            'shifting summary output by one row (moving on to the next unique ticker name)
             k = k + 1
-            ' resetting opening price per ticker flag
+            ' Resetting opening price per ticker flag
             f = 0
-            ' resetting total stock volume per ticker value
+            ' Resetting total stock volume per ticker value
             total_stock_volume = 0
         End If
     Next i
-    'calculate number of rows of filled-in data for column J. It should be equal to a total number of ticker names + 1 for header
+    ' Calculate number of rows of filled-in data for column J. It should be equal to a total number of ticker names + 1 for header
     lrow = ActiveWorkbook.Sheets(mySheets(s)).Cells(Rows.Count, 10).End(xlUp).Row
     
     ' Initialize reference values for maximum and minimum decrease in stock value calculations
@@ -92,7 +91,6 @@ For s = 1 To (nmbSheets)
     
     ' Change color of cells in J column based on their value. Set color to green if >0 and red - if <0
     For i = 2 To lrow
-    'MsgBox ("Cell value in row  " + Str(lrow) + " is " + Str(ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 10).Value))
         If ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 10).Value > 0 Then
             ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 10).Interior.ColorIndex = 4
         ElseIf ActiveWorkbook.Sheets(mySheets(s)).Cells(i, 10).Value < 0 Then
@@ -114,19 +112,20 @@ For s = 1 To (nmbSheets)
         End If
     Next i
     
-    ' report min/max % change statistics
-    ' row headers
+    ' Report min/max % change statistics
+    ' Row headers
     ActiveWorkbook.Sheets(mySheets(s)).Range("O2").Value = "Greatest % increase"
     ActiveWorkbook.Sheets(mySheets(s)).Range("O3").Value = "Greatest % decrease"
     ActiveWorkbook.Sheets(mySheets(s)).Range("O4").Value = "Greatest Total Volume"
-    ' column headers
+    ' Column headers
     ActiveWorkbook.Sheets(mySheets(s)).Range("P1").Value = "Ticker"
     ActiveWorkbook.Sheets(mySheets(s)).Range("Q1").Value = "Value"
     
     ActiveWorkbook.Sheets(mySheets(s)).Range("P2").Value = max_increase_stock
     ActiveWorkbook.Sheets(mySheets(s)).Range("P3").Value = max_decrease_stock
     ActiveWorkbook.Sheets(mySheets(s)).Range("P4").Value = max_total_stock_volume_stock
-    '
+    
+    ' Format the output cells as percentage value (%)
     ActiveWorkbook.Sheets(mySheets(s)).Range("Q2").Value = max_increase
         ActiveWorkbook.Sheets(mySheets(s)).Range("Q2").NumberFormat = "0.00%"
     ActiveWorkbook.Sheets(mySheets(s)).Range("Q3").Value = max_decrease
